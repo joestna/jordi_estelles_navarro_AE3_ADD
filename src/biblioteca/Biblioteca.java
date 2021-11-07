@@ -1,7 +1,16 @@
 package biblioteca;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document; // Para gestionar XML
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Biblioteca {
 
@@ -14,7 +23,6 @@ public class Biblioteca {
 		
 		while( !input.equals( "6" ) )
 		{
-			
 			System.out.println( "1. Mostrar todos los titulos de la biblioteca." );
 			System.out.println( "2. Mostrar informacion detallada de un libro." );
 			System.out.println( "3. Crear nuevo libro." );
@@ -29,7 +37,13 @@ public class Biblioteca {
 			switch( input ) 
 			{
 				case "1" : 
-					RecuperarTodos();
+					ArrayList<Libro> biblioteca = RecuperarTodos();
+					
+					for( Libro libro : biblioteca ) {
+						libro.getId();
+						libro.getTitle();
+					}
+					
 					break;
 				
 					
@@ -69,7 +83,7 @@ public class Biblioteca {
 	static Libro CrearLibro( Scanner sc )
 	{
 		System.out.println( "Introduce el nombre del libro : ");
-		int id = sc.nextInt();
+		String id = sc.next();
 		
 		System.out.println( "Introduce el titutlo del libro : ");
 		String title = sc.next();
@@ -78,13 +92,13 @@ public class Biblioteca {
 		String author = sc.next();
 		
 		System.out.println( "Introduce el anyo de publicacion del libro : ");
-		int yearPublication = sc.nextInt();
+		String yearPublication = sc.next());
 		
 		System.out.println( "Introduce la editorial del libro : ");
 		String editorial = sc.next();
 		
 		System.out.println( "Introduce el numeor de paginas del libro : ");
-		int numPages = sc.nextInt();
+		String numPages = sc.next();
 		
 		
 		Libro libro = new Libro( id, title, author, yearPublication, editorial, numPages );
@@ -95,14 +109,64 @@ public class Biblioteca {
 	static int AnyadirLibro( Libro libro ) // AnyadirLibro = CrearLibro de la actividad
 	{
 		//anyadir el libro a un XML
+		try 
+		{
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.newDocument();
+		
+		Element biblioteca = doc.createElement( "biblioteca" );
+		doc.appendChild( biblioteca );
+		
+		}
+		catch( Exception e )
+		{
+			System.out.println( "error" ); // Modificar
+		}
 		
 		return libro.getId();
 	}
 	
 	static Libro RecuperarLibro( int identificador ) 
-	{
-		// devuelve un objeto libro a partir de un identificador (id)
-		// analiza el xml en busca del libro y transoforma los datos del libro en un objeto libro
+	{		
+		String id = String.valueOf( identificador );
+		
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.newDocument();
+		
+		Element raiz = doc.getDocumentElement(); // obtiene el elemento raiz (biblioteca)
+		NodeList nodeList = doc.getElementsByTagName( "libro" ); //lista de objetos que seran los nodos llamados libro
+				
+		for( int i = 0; i < nodeList.getLength(); i++ ) 
+		{
+			Node node = nodeList.item( i );
+			Element nodeElement = ( Element ) node; // Casting (transforma) el elemento Node a Element
+			
+			if( id.equals( nodeElement.getAttribute( "id" ) ) )
+			{
+				Libro libro = new Libro( nodeElement.getAttribute( "id" ),
+										 nodeElement.getElementsByTagName( "title" ).item(0).getTextContent(),
+										 nodeElement.getElementsByTagName( "author" ).item(0).getTextContent(),
+										 nodeElement.getElementsByTagName( "yearPublication" ).item(0).getTextContent(),
+										 nodeElement.getElementsByTagName( "editorial" ).item(0).getTextContent(),
+										 nodeElement.getElementsByTagName( "numPages" ).item(0).getTextContent()
+									   );
+				return libro;
+			}
+			else 
+			{
+				System.out.println( "Libro no encontrado" );
+				
+				Libro libro;
+				
+				return libro;
+			}
+		}
+		
+		
+		
+		
 		
 		return libroBuscado;
 	}
