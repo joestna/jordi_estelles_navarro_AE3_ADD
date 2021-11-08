@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <biblioteca>
-    <libro id="0">
+    <libro id="1">
         <titulo>El Nombre de la Rosa</titulo>
         <author>Jack Sparrow</author>
         <yearPublication>1900</yearPublication>
         <editorial>Anaya</editorial>
         <numPages>500</numPages>
     </libro>
-    <libro id="0">
+    <libro id="2">
         <titulo>El Nombre del viento</titulo>
         <author>Rothfuss</author>
         <yearPublication>2000</yearPublication>
         <editorial>Santillana</editorial>
         <numPages>1000</numPages>
     </libro>
-    <libro id="0">
-        <titulo>El Nombre de la Rosa</titulo>
-        <author>Jack Sparrow</author>
-        <yearPublication>1900</yearPublication>
-        <editorial>Anaya</editorial>
-        <numPages>500</numPages>
+    <libro id="112">
+        <titulo>asdf</titulo>
+        <author>asdf</author>
+        <yearPublication>1222</yearPublication>
+        <editorial>asdf</editorial>
+        <numPages>122222</numPages>
     </libro>
 </biblioteca>

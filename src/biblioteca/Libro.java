@@ -2,14 +2,14 @@ package biblioteca;
 
 public class Libro 
 {
-	private String _id;
+	private int _id;
 	private String _title;
 	private String _author;
-	private String _yearPublication;
+	private int _yearPublication;
 	private String _editorial;
-	private String _numPages;
+	private int _numPages;
 	
-	public Libro( String id, String title, String author, String yearPublication, String editorial, String numPages )
+	public Libro( int id, String title, String author, int yearPublication, String editorial, int numPages )
 	{
 		_id = id;
 		_title = title;
@@ -19,7 +19,7 @@ public class Libro
 		_numPages = numPages;
 	}
 	
-	public String getId()
+	public int getId()
 	{
 		return _id;
 	}
@@ -34,7 +34,7 @@ public class Libro
 		return _author;
 	}
 	
-	public String getYearPublication()
+	public int getYearPublication()
 	{
 		return _yearPublication;
 	}
@@ -44,7 +44,7 @@ public class Libro
 		return _editorial;
 	}
 	
-	public String getNumPages()
+	public int getNumPages()
 	{
 		return _numPages;
 	}

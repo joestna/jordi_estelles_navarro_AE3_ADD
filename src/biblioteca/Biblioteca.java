@@ -21,86 +21,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Biblioteca {
-
-	public static void main(String[] args) 
-	{
-		Scanner sc = new Scanner( System.in );
-		
-		ArrayList<Libro> bibliotecaLibros = RecuperarTodos(); //Parseamos el documento xml y almacenamos los datos en la lista biblioteca
-		
-		String input = "";
-		
-		
-		while( !input.equals( "6" ) )
-		{
-			System.out.println( "\n\n### PANEL DE OPCIONES ###\n" );
-			System.out.println( "1. Mostrar todos los titulos de la biblioteca." );
-			System.out.println( "2. Mostrar informacion detallada de un libro." );
-			System.out.println( "3. Crear nuevo libro." );
-			System.out.println( "4. Actualizar libro." );
-			System.out.println( "5. Borrar libro." );
-			System.out.println( "6. Cerrar la biblioteca.\n" );
-			
-			System.out.print( "> ");
-			input = sc.next();
-			
-			int id = 0;
-			
-			switch( input ) 
-			{
-				case "1" :
-					System.out.println( "" );
-					
-					for( Libro libro : bibliotecaLibros ) {
-						System.out.println( "ID : " + libro.getId() + " | Titulo : " + libro.getTitle() );
-					}
-					
-					break;
-				
-					
-				case "2" :		
-					do{
-						System.out.print( "\nIntroduce el *ID* del libro que quieres mostrar : ");
-						id = sc.nextInt();
-					}while( id <= 0 || id > bibliotecaLibros.size() );
-					
-					MostrarLibro( RecuperarLibro( id ) ); // RecuperarLibro( id )
-					break;
-				
-					
-				case "3" :
-					AnyadirLibro( bibliotecaLibros, bibliotecaLibros.get(0) ); //CrearLibro()
-					break;
-					
-					
-				case "4" :
-					System.out.println( "\nIntroduce el id del libro a actualizar : ");
-					id = sc.nextInt();
-					
-					//ActualizaLibro( id );
-					break;
-				
-					
-				case "5" :
-					System.out.println( "\nIntroduce el id del libro a borrar : ");
-					id = sc.nextInt();
-					
-					//BorrarLibro( id );
-					break;
-					
-				default : 
-					System.out.println( ">> Opcion Inexistente" );
-			}
-		}
-		
-		sc.close();	
-	}
+public class Biblioteca 
+{
+	private ArrayList<Libro> bibliotecaLibros = RecuperarTodos(); //Parseamos el documento xml y almacenamos los datos en la lista biblioteca
 	
 	
-	static ArrayList<Libro> RecuperarTodos()
+	
+	public ArrayList<Libro> RecuperarTodos()
 	{		
-		ArrayList<Libro> biblioteca = new ArrayList<Libro>();
+		ArrayList<Libro> bibliotecaLibros = new ArrayList<Libro>();
 		
 		try
 		{
@@ -108,7 +37,7 @@ public class Biblioteca {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse( new File( "/home/jordi/proyectosJavaEclipse/jordi_estelles_navarro_AE3_ADD/info/biblioteca.xml" ) ); // Diferencia de leer a escribir en un fichero XML
 			
-			Element raiz = doc.getDocumentElement(); // obtiene el elemento hijo de document (biblioteca)
+			//Element biblioteca = doc.getDocumentElement(); // obtiene el elemento hijo de document (biblioteca)
 			NodeList nodeList = doc.getElementsByTagName( "libro" ); //lista de objetos que seran los nodos llamados libro
 					
 			for( int i = 0; i < nodeList.getLength(); i++ ) 
@@ -116,15 +45,15 @@ public class Biblioteca {
 				Node node = nodeList.item( i ); // Fijmos el nodo que buscamos en un objeto
 				Element nodeElement = ( Element ) node; // Casting (transforma) el objeto Node anterior a Element
 							
-				Libro libro = new Libro( nodeElement.getAttribute( "id" ),
+				Libro libro = new Libro( Integer.valueOf(nodeElement.getAttribute( "id" )),
 										 nodeElement.getElementsByTagName( "title" ).item(0).getTextContent(),
 										 nodeElement.getElementsByTagName( "author" ).item(0).getTextContent(),
-										 nodeElement.getElementsByTagName( "yearPublication" ).item(0).getTextContent(),
+										 Integer.valueOf(nodeElement.getElementsByTagName( "yearPublication" ).item(0).getTextContent()),
 										 nodeElement.getElementsByTagName( "editorial" ).item(0).getTextContent(),
-										 nodeElement.getElementsByTagName( "numPages" ).item(0).getTextContent()
+										 Integer.valueOf(nodeElement.getElementsByTagName( "numPages" ).item(0).getTextContent())
 									   );
 				
-				biblioteca.add( libro );			
+				bibliotecaLibros.add( libro );			
 			}
 		}
 		catch( Exception e )
@@ -132,11 +61,11 @@ public class Biblioteca {
 			System.out.println( "error" ); // Modificar
 		}
 		
-		return biblioteca;
+		return bibliotecaLibros;
 	}
 	
 	
-	static void MostrarLibro( Libro libro ) 
+	public void MostrarLibro( Libro libro ) 
 	{
 		System.out.println( ">> ID : " + libro.getId() );
 		System.out.println( ">> Titulo : " + libro.getTitle() );
@@ -147,15 +76,14 @@ public class Biblioteca {
 	}
 	
 	
-	static Libro RecuperarLibro( int identificador ) 
+	public Libro RecuperarLibro( int identificador ) 
 	{		
-		ArrayList<Libro> biblioteca = RecuperarTodos();
-		String id = String.valueOf( identificador );
+		//ArrayList<Libro> biblioteca = RecuperarTodos();
 		boolean libroExiste = false;
 		
-		for( Libro libro : biblioteca ) 
+		for( Libro libro : bibliotecaLibros ) 
 		{
-			if( libro.getId().equals( id ) )
+			if( libro.getId() == identificador )
 			{
 				libroExiste = true;				
 			}
@@ -163,7 +91,7 @@ public class Biblioteca {
 		
 		if( libroExiste ) 
 		{
-			return biblioteca.get( identificador -1 ); // Posicion real en el arryalist bibilioteca
+			return bibliotecaLibros.get( identificador -1 ); // Posicion real en el arryalist bibilioteca
 			
 		}else {
 			System.out.println( "Libro no encontrado ");
@@ -172,14 +100,78 @@ public class Biblioteca {
 	}
 	
 	
-	static ArrayList<Libro> AnyadirLibro( ArrayList<Libro> bibliotecaLibros, Libro libroCreado )
+	public ArrayList<Libro> AnyadirLibro( Libro libroCreado )
 	{
 		// a partir de la lista que le pasamos tiene que volver a crear un nuevo documento con los valores que ya tenia y los del libro que le pasamos nuevo
 		
 		bibliotecaLibros.add( libroCreado );
+		boolean validador = false;
 		
-		String atributo = "0";		
+		validador = GuardarInformacionXML();
 		
+		if( !validador ) 
+		{
+			System.out.println( "Error al anyadir libro. ");
+		}
+		else 
+		{
+			System.out.println( ">> Libro anyadido correctamente. ");
+		}
+			
+		
+		return bibliotecaLibros;
+	}
+	
+	
+	public Libro CrearLibro( Scanner sc )
+	{
+		
+		// FALTAN EXPRESIONES REGULARES
+		
+		boolean verificador;
+		int id = 0;
+		
+		do {
+			System.out.print( "\nIntroduce el id del libro : ");
+			id = sc.nextInt();
+			
+			verificador = true;
+			
+			for( int i = 0; i < bibliotecaLibros.size(); i++ )
+			{
+				if( id == Integer.valueOf(bibliotecaLibros.get( i ).getId()) ) 
+				{
+					verificador = false;
+					System.out.println( ">> El ID del libro introducido ya existe ");
+				}
+			}
+		}while( id <= 0 || !verificador );
+		
+		
+		System.out.print( "Introduce el titutlo del libro : ");
+		String title = sc.next();
+		
+		System.out.print( "Introduce el autor del libro : ");
+		String author = sc.next();
+		
+		System.out.print( "Introduce el anyo de publicacion del libro : ");
+		int yearPublication = sc.nextInt();
+		
+		System.out.print( "Introduce la editorial del libro : ");
+		String editorial = sc.next();
+		
+		System.out.print( "Introduce el numeor de paginas del libro : ");
+		int numPages = sc.nextInt();
+		
+		Libro libro = new Libro( id, title, author, yearPublication, editorial, numPages );
+		System.out.println( ">> Libro creado correctamente. " );
+		
+		return libro;
+	}
+	
+	
+	private boolean GuardarInformacionXML() 
+	{
 		try 
 		{
 			//PASAR EL DOM A MEMORIA DE EJECUCCION
@@ -194,7 +186,7 @@ public class Biblioteca {
 			for( Libro libroAnyadir : bibliotecaLibros )
 			{
 				Element libro = doc.createElement( "libro" );
-				libro.setAttribute( "id", atributo );
+				libro.setAttribute( "id", String.valueOf( libroAnyadir.getId() ) );
 				biblioteca.appendChild( libro );
 			
 					Element titulo = doc.createElement( "titulo" );
@@ -235,7 +227,10 @@ public class Biblioteca {
 				FileWriter fw = new FileWriter( "/home/jordi/proyectosJavaEclipse/jordi_estelles_navarro_AE3_ADD/info/biblioteca2.xml" );
 				StreamResult result = new StreamResult( fw );
 				aTransformer.transform( source, result );
+				
 				fw.close();
+				return true;	
+				
 			}
 			catch( IOException e )
 			{
@@ -251,8 +246,8 @@ public class Biblioteca {
 		catch( ParserConfigurationException ex ) 
 		{
 			System.out.println( "Error escribiendo en el documento" );
-		}	
+		}
 		
-		return bibliotecaLibros;
+		return false;
 	}
 }
