@@ -57,7 +57,7 @@ public class App {
 					System.out.println( "\nIntroduce el id del libro a actualizar : ");
 					id = sc.nextInt();
 					
-					//ActualizaLibro( id );
+					biblioteca.ActualizarLibro( sc, id );
 					break;
 				
 					
@@ -65,8 +65,14 @@ public class App {
 					System.out.println( "\nIntroduce el id del libro a borrar : ");
 					id = sc.nextInt();
 					
-					//BorrarLibro( id );
+					biblioteca.BorrarLibro( id );
 					break;
+					
+					
+				case "6" :
+					System.out.println( ">> Gracias por jugar. ");
+					break;
+				
 					
 				default : 
 					System.out.println( ">> Opcion Inexistente" );

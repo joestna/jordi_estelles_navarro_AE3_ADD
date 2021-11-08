@@ -65,6 +65,7 @@ public class Biblioteca
 	}
 	
 	
+	
 	public void MostrarLibro( Libro libro ) 
 	{
 		System.out.println( ">> ID : " + libro.getId() );
@@ -74,6 +75,7 @@ public class Biblioteca
 		System.out.println( ">> Editorial : " + libro.getEditorial() );
 		System.out.println( ">> Numero Paginas : " + libro.getNumPages() );
 	}
+	
 	
 	
 	public Libro RecuperarLibro( int identificador ) 
@@ -100,6 +102,7 @@ public class Biblioteca
 	}
 	
 	
+	
 	public ArrayList<Libro> AnyadirLibro( Libro libroCreado )
 	{
 		// a partir de la lista que le pasamos tiene que volver a crear un nuevo documento con los valores que ya tenia y los del libro que le pasamos nuevo
@@ -111,7 +114,7 @@ public class Biblioteca
 		
 		if( !validador ) 
 		{
-			System.out.println( "Error al anyadir libro. ");
+			System.out.println( ">> Error al anyadir libro. ");
 		}
 		else 
 		{
@@ -121,6 +124,7 @@ public class Biblioteca
 		
 		return bibliotecaLibros;
 	}
+	
 	
 	
 	public Libro CrearLibro( Scanner sc )
@@ -160,13 +164,97 @@ public class Biblioteca
 		System.out.print( "Introduce la editorial del libro : ");
 		String editorial = sc.next();
 		
-		System.out.print( "Introduce el numeor de paginas del libro : ");
+		System.out.print( "Introduce el numero de paginas del libro : ");
 		int numPages = sc.nextInt();
 		
 		Libro libro = new Libro( id, title, author, yearPublication, editorial, numPages );
 		System.out.println( ">> Libro creado correctamente. " );
 		
 		return libro;
+	}
+	
+	
+	
+	public void ActualizarLibro( Scanner sc, int identificador )
+	{
+		System.out.println( "Libro seleccionado : " );
+		
+		MostrarLibro( RecuperarLibro( identificador ) );
+		Libro libro = RecuperarLibro( identificador );
+		int marcador = 0;
+		boolean validador = false;
+		
+		for( int i = 0; i < bibliotecaLibros.size(); i++ )
+		{
+			if( i == bibliotecaLibros.get( i ).getId() )
+			{
+				marcador = i;
+			}
+		}
+		
+		System.out.print( "Introduce el nuevo titulo del libro : ");
+		libro.setTitle( sc.next() );
+		
+		System.out.print( "Introduce el nuevo autor del libro : ");
+		libro.setAuthor( sc.next() );
+		
+		System.out.print( "Introduce el nuevo anyo de publicacion del libro : ");
+		libro.setYearPublication( sc.nextInt() );
+		
+		System.out.print( "Introduce la nuevo editorial del libro : ");
+		libro.setEditorial( sc.next() );
+		
+		System.out.print( "Introduce el nuevo numero de paginas del libro : ");
+		libro.setAuthor( sc.nextInt() );	
+		
+		
+		bibliotecaLibros.set( marcador, libro );
+
+		
+		validador = GuardarInformacionXML();
+		
+		if( !validador ) 
+		{
+			System.out.println( ">> Error al actualizar libro. ");
+		}
+		else 
+		{
+			System.out.println( ">> Libro actualizado correctamente. ");
+		}		
+	}
+	
+	
+	
+	public void BorrarLibro( int identificador )
+	{
+		System.out.println( "Libro seleccionado : " );
+		
+		MostrarLibro( RecuperarLibro( identificador ) );
+		Libro libro = RecuperarLibro( identificador );
+		
+		int marcador = 0;
+		boolean validador = false;
+		
+		for( int i = 0; i < bibliotecaLibros.size(); i++ )
+		{
+			if( i == bibliotecaLibros.get( i ).getId() )
+			{
+				marcador = i;
+			}
+		}
+		
+		bibliotecaLibros.remove( marcador );
+		
+		validador = GuardarInformacionXML();
+		
+		if( !validador ) 
+		{
+			System.out.println( ">> Error al borrar libro. ");
+		}
+		else 
+		{
+			System.out.println( ">> Libro borrado correctamente. ");
+		}	
 	}
 	
 	
