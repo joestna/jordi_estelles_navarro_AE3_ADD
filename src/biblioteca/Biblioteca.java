@@ -1,11 +1,20 @@
 package biblioteca;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document; // Para gestionar XML
 import org.w3c.dom.Element;
@@ -18,133 +27,95 @@ public class Biblioteca {
 	{
 		Scanner sc = new Scanner( System.in );
 		
+		ArrayList<Libro> biblioteca = RecuperarTodos(); //Parseamos el documento xml y almacenamos los datos en la lista biblioteca
+		
 		String input = "";
 		
 		
 		while( !input.equals( "6" ) )
 		{
+			System.out.println( "\n\n### PANEL DE OPCIONES ###\n" );
 			System.out.println( "1. Mostrar todos los titulos de la biblioteca." );
 			System.out.println( "2. Mostrar informacion detallada de un libro." );
 			System.out.println( "3. Crear nuevo libro." );
 			System.out.println( "4. Actualizar libro." );
 			System.out.println( "5. Borrar libro." );
-			System.out.println( "6. Cerrar la biblioteca." );
+			System.out.println( "6. Cerrar la biblioteca.\n" );
 			
+			System.out.print( "> ");
 			input = sc.next();
 			
 			int id = 0;
 			
 			switch( input ) 
 			{
-				case "1" : 
-					ArrayList<Libro> biblioteca = RecuperarTodos();
+				case "1" :
+					System.out.println( "" );
 					
 					for( Libro libro : biblioteca ) {
-						libro.getId();
-						libro.getTitle();
+						System.out.println( "ID : " + libro.getId() + " | Titulo : " + libro.getTitle() );
 					}
 					
 					break;
 				
 					
-				case "2" :
-					System.out.println( "Introduce el id del libro que quieres mostrar : ");
-					id = sc.nextInt();
+				case "2" :		
+					do{
+						System.out.print( "\nIntroduce el *ID* del libro que quieres mostrar : ");
+						id = sc.nextInt();
+					}while( id <= 0 || id > biblioteca.size() );
 					
-					MostrarLibro( RecuperarLibro( id ) );
+					MostrarLibro( RecuperarLibro( id ) ); // RecuperarLibro( id )
 					break;
 				
 					
 				case "3" :
-					AnyadirLibro( CrearLibro( sc ) );
+					//AnyadirLibro( CrearLibro( sc ) );
 					break;
 					
 					
 				case "4" :
-					System.out.println( "Introduce el id del libro a actualizar : ");
+					System.out.println( "\nIntroduce el id del libro a actualizar : ");
 					id = sc.nextInt();
 					
-					ActualizaLibro( id );
+					//ActualizaLibro( id );
 					break;
 				
 					
 				case "5" :
-					System.out.println( "Introduce el id del libro a borrar : ");
+					System.out.println( "\nIntroduce el id del libro a borrar : ");
 					id = sc.nextInt();
 					
-					BorrarLibro( id );
+					//BorrarLibro( id );
 					break;
+					
+				default : 
+					System.out.println( ">> Opcion Inexistente" );
 			}
 		}
 		
 		sc.close();	
 	}
 	
-	static Libro CrearLibro( Scanner sc )
-	{
-		System.out.println( "Introduce el nombre del libro : ");
-		String id = sc.next();
-		
-		System.out.println( "Introduce el titutlo del libro : ");
-		String title = sc.next();
-		
-		System.out.println( "Introduce el autor del libro : ");
-		String author = sc.next();
-		
-		System.out.println( "Introduce el anyo de publicacion del libro : ");
-		String yearPublication = sc.next());
-		
-		System.out.println( "Introduce la editorial del libro : ");
-		String editorial = sc.next();
-		
-		System.out.println( "Introduce el numeor de paginas del libro : ");
-		String numPages = sc.next();
-		
-		
-		Libro libro = new Libro( id, title, author, yearPublication, editorial, numPages );
-		
-		return libro;
-	}
 	
-	static int AnyadirLibro( Libro libro ) // AnyadirLibro = CrearLibro de la actividad
-	{
-		//anyadir el libro a un XML
-		try 
-		{
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.newDocument();
-		
-		Element biblioteca = doc.createElement( "biblioteca" );
-		doc.appendChild( biblioteca );
-		
-		}
-		catch( Exception e )
-		{
-			System.out.println( "error" ); // Modificar
-		}
-		
-		return libro.getId();
-	}
-	
-	static Libro RecuperarLibro( int identificador ) 
+	static ArrayList<Libro> RecuperarTodos()
 	{		
-		String id = String.valueOf( identificador );
+		ArrayList<Libro> biblioteca = new ArrayList<Libro>();
 		
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.newDocument();
-		
-		Element raiz = doc.getDocumentElement(); // obtiene el elemento raiz (biblioteca)
-		NodeList nodeList = doc.getElementsByTagName( "libro" ); //lista de objetos que seran los nodos llamados libro
-				
-		for( int i = 0; i < nodeList.getLength(); i++ ) 
+		try
 		{
-			Node node = nodeList.item( i );
-			Element nodeElement = ( Element ) node; // Casting (transforma) el elemento Node a Element
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse( new File( "/home/jordi/proyectosJavaEclipse/jordi_estelles_navarro_AE3_ADD/info/biblioteca.xml" ) ); // Diferencia de leer a escribir en un fichero XML
 			
-			if( id.equals( nodeElement.getAttribute( "id" ) ) )
+			Element raiz = doc.getDocumentElement(); // obtiene el elemento hijo de document (biblioteca)
+			NodeList nodeList = doc.getElementsByTagName( "libro" ); //lista de objetos que seran los nodos llamados libro
+					
+			for( int i = 0; i < nodeList.getLength(); i++ ) 
 			{
+				Node node = nodeList.item( i ); // Fijmos el nodo que buscamos en un objeto
+				Element nodeElement = ( Element ) node; // Casting (transforma) el objeto Node anterior a Element
+							
 				Libro libro = new Libro( nodeElement.getAttribute( "id" ),
 										 nodeElement.getElementsByTagName( "title" ).item(0).getTextContent(),
 										 nodeElement.getElementsByTagName( "author" ).item(0).getTextContent(),
@@ -152,46 +123,53 @@ public class Biblioteca {
 										 nodeElement.getElementsByTagName( "editorial" ).item(0).getTextContent(),
 										 nodeElement.getElementsByTagName( "numPages" ).item(0).getTextContent()
 									   );
-				return libro;
-			}
-			else 
-			{
-				System.out.println( "Libro no encontrado" );
 				
-				Libro libro;
-				
-				return libro;
+				biblioteca.add( libro );			
 			}
 		}
-		
-		
-		
-		
-		
-		return libroBuscado;
-	}
-
-	static void MostrarLibro( Libro libro ) 
-	{
-		// muestra los atributos del libro que le pasamos por pantalla
-	}
-	
-	static void BorrarLibro( int identificador )
-	{
-		// borra un objeto libro a partir de un identificador
-		
-		
-	}
-	
-	static void ActualizaLibro( int identificador ) 
-	{
-		// modifica la informacion de un libro a partir de su identificador
-	}
-	
-	static ArrayList<Libro> RecuperarTodos()
-	{
-		// devuelve una lista con todos los libros de la biblioteca
+		catch( Exception e )
+		{
+			System.out.println( "error" ); // Modificar
+		}
 		
 		return biblioteca;
 	}
+	
+	
+	static void MostrarLibro( Libro libro ) 
+	{
+		System.out.println( ">> ID : " + libro.getId() );
+		System.out.println( ">> Titulo : " + libro.getTitle() );
+		System.out.println( ">> Autor : " + libro.getAuthor() );
+		System.out.println( ">> Anyo Publicacion : " + libro.getYearPublication() );
+		System.out.println( ">> Editorial : " + libro.getEditorial() );
+		System.out.println( ">> Numero Paginas : " + libro.getNumPages() );
+	}
+	
+	
+	static Libro RecuperarLibro( int identificador ) 
+	{		
+		ArrayList<Libro> biblioteca = RecuperarTodos();
+		String id = String.valueOf( identificador );
+		boolean libroExiste = false;
+		
+		for( Libro libro : biblioteca ) 
+		{
+			if( libro.getId().equals( id ) )
+			{
+				libroExiste = true;				
+			}
+		}
+		
+		if( libroExiste ) 
+		{
+			return biblioteca.get( identificador -1 ); // Posicion real en el arryalist bibilioteca
+			
+		}else {
+			System.out.println( "Libro no encontrado ");
+			return null;
+		}		
+	}
+	
+	
 }

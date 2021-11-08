@@ -28,4 +28,24 @@ public class Libro
 	{
 		return _title;
 	}
+	
+	public String getAuthor() 
+	{
+		return _author;
+	}
+	
+	public String getYearPublication()
+	{
+		return _yearPublication;
+	}
+	
+	public String getEditorial()
+	{
+		return _editorial;
+	}
+	
+	public String getNumPages()
+	{
+		return _numPages;
+	}
 }

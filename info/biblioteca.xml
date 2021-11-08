@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <libros>
-	<libro id=1>
+	<libro id="1">
 		<title>El Nombre de la Rosa</title>
 		<author>Jack Sparrow</author>
 		<yearPublication>1900</yearPublication>
 		<editorial>Anaya</editorial>
 		<numPages>500</numPages>
 	</libro>
-	<libro id=2>
+	<libro id="2">
 		<title>El Nombre del viento</title>
 		<author>Rothfuss</author>
 		<yearPublication>2000</yearPublication>
