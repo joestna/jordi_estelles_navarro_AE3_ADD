@@ -27,7 +27,7 @@ public class Biblioteca {
 	{
 		Scanner sc = new Scanner( System.in );
 		
-		ArrayList<Libro> biblioteca = RecuperarTodos(); //Parseamos el documento xml y almacenamos los datos en la lista biblioteca
+		ArrayList<Libro> bibliotecaLibros = RecuperarTodos(); //Parseamos el documento xml y almacenamos los datos en la lista biblioteca
 		
 		String input = "";
 		
@@ -52,7 +52,7 @@ public class Biblioteca {
 				case "1" :
 					System.out.println( "" );
 					
-					for( Libro libro : biblioteca ) {
+					for( Libro libro : bibliotecaLibros ) {
 						System.out.println( "ID : " + libro.getId() + " | Titulo : " + libro.getTitle() );
 					}
 					
@@ -63,14 +63,14 @@ public class Biblioteca {
 					do{
 						System.out.print( "\nIntroduce el *ID* del libro que quieres mostrar : ");
 						id = sc.nextInt();
-					}while( id <= 0 || id > biblioteca.size() );
+					}while( id <= 0 || id > bibliotecaLibros.size() );
 					
 					MostrarLibro( RecuperarLibro( id ) ); // RecuperarLibro( id )
 					break;
 				
 					
 				case "3" :
-					//AnyadirLibro( CrearLibro( sc ) );
+					AnyadirLibro( bibliotecaLibros, bibliotecaLibros.get(0) ); //CrearLibro()
 					break;
 					
 					
@@ -172,4 +172,87 @@ public class Biblioteca {
 	}
 	
 	
+	static ArrayList<Libro> AnyadirLibro( ArrayList<Libro> bibliotecaLibros, Libro libroCreado )
+	{
+		// a partir de la lista que le pasamos tiene que volver a crear un nuevo documento con los valores que ya tenia y los del libro que le pasamos nuevo
+		
+		bibliotecaLibros.add( libroCreado );
+		
+		String atributo = "0";		
+		
+		try 
+		{
+			//PASAR EL DOM A MEMORIA DE EJECUCCION
+			
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.newDocument(); // Para escribir en un fichero tenemos que pasar el DOM a memoria de ejecuccion
+			
+			Element biblioteca = doc.createElement( "biblioteca" );
+			doc.appendChild( biblioteca );// Elemento hijo de document (biblioteca)
+			
+			for( Libro libroAnyadir : bibliotecaLibros )
+			{
+				Element libro = doc.createElement( "libro" );
+				libro.setAttribute( "id", atributo );
+				biblioteca.appendChild( libro );
+			
+					Element titulo = doc.createElement( "titulo" );
+					titulo.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getTitle() ) ) ); // Se le da el valor al nodo titulo
+					libro.appendChild( titulo ); // Elemento hijo del nodo libro (titulo)
+					
+					Element author = doc.createElement( "author" );
+					author.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getAuthor() ) ) ); // Se le da el valor al nodo titulo
+					libro.appendChild( author );
+					
+					Element yearPublication = doc.createElement( "yearPublication" );
+					yearPublication.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getYearPublication() ) ) ); // Se le da el valor al nodo titulo
+					libro.appendChild( yearPublication );
+					
+					Element editorial = doc.createElement( "editorial" );
+					editorial.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getEditorial() ) ) ); // Se le da el valor al nodo titulo
+					libro.appendChild( editorial );
+					
+					Element numPages = doc.createElement( "numPages" );
+					numPages.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getNumPages() ) ) ); // Se le da el valor al nodo titulo
+					libro.appendChild( numPages );
+			}
+
+			// GUARDAR EL DOM DE LA MEMORIA DE EJECUCCION A DISCO
+			TransformerFactory tranFactory = TransformerFactory.newInstance(); //las dependencias puede que no sean correctas
+			Transformer aTransformer = tranFactory.newTransformer();
+			
+			// DAR FORMATO AL FICHERO XML QUE ESTAMOS CREANDO
+			aTransformer.setOutputProperty( OutputKeys.ENCODING,  "ISO-8859-1)" ); // Formato universal para que interprete bien todo tipo de caracteres
+			aTransformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" ); // Indentado (sangria) 4 espacios
+			aTransformer.setOutputProperty( OutputKeys.INDENT,  "yes" ); // Activar el indentado
+			
+			
+			DOMSource source = new DOMSource( doc );
+			
+			try
+			{
+				FileWriter fw = new FileWriter( "/home/jordi/proyectosJavaEclipse/jordi_estelles_navarro_AE3_ADD/info/biblioteca2.xml" );
+				StreamResult result = new StreamResult( fw );
+				aTransformer.transform( source, result );
+				fw.close();
+			}
+			catch( IOException e )
+			{
+				e.printStackTrace();
+			}
+			
+		
+		}
+		catch( TransformerException ex )
+		{
+			System.out.println( "Error escribiendo en el documento" );
+		}
+		catch( ParserConfigurationException ex ) 
+		{
+			System.out.println( "Error escribiendo en el documento" );
+		}	
+		
+		return bibliotecaLibros;
+	}
 }
