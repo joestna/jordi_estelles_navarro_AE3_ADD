@@ -26,7 +26,9 @@ public class Biblioteca
 	private ArrayList<Libro> bibliotecaLibros = RecuperarTodos(); //Parseamos el documento xml y almacenamos los datos en la lista biblioteca
 	
 	
-	
+	// Metodo : RecuperarTodos
+	// Parametros : 
+	// Devuelve un ArrayList con la lista de libros que se encuentran en el XML selecccionado
 	public ArrayList<Libro> RecuperarTodos()
 	{		
 		ArrayList<Libro> bibliotecaLibros = new ArrayList<Libro>();
@@ -36,8 +38,7 @@ public class Biblioteca
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse( new File( "/home/jordi/proyectosJavaEclipse/jordi_estelles_navarro_AE3_ADD/info/biblioteca.xml" ) ); // Diferencia de leer a escribir en un fichero XML
-			
-			//Element biblioteca = doc.getDocumentElement(); // obtiene el elemento hijo de document (biblioteca)
+
 			NodeList nodeList = doc.getElementsByTagName( "libro" ); //lista de objetos que seran los nodos llamados libro
 					
 			for( int i = 0; i < nodeList.getLength(); i++ ) 
@@ -58,7 +59,7 @@ public class Biblioteca
 		}
 		catch( Exception e )
 		{
-			System.out.println( ">> Error" ); // Modificar
+			System.out.println( e );
 		}
 		
 		return bibliotecaLibros;
@@ -66,6 +67,9 @@ public class Biblioteca
 	
 	
 	
+	// Metodo : MostrarLibro
+	// Parametros : Libro
+	// Muestra la informacion de un libro pasado por parametro
 	public void MostrarLibro( Libro libro ) 
 	{
 		try
@@ -86,6 +90,9 @@ public class Biblioteca
 	
 	
 	
+	// Metodo : ComprobarLibroExiste
+	// Parametros : int
+	// Comprueba que el libro con el identificador que pasamos por parametro existe en el fichero XML->Lista de libros
 	private boolean ComprobarLibroExiste( int identificador )
 	{
 		ArrayList<Libro> biblioteca = RecuperarTodos();
@@ -104,14 +111,17 @@ public class Biblioteca
 	}
 	
 	
-	
+
+	// Metodo : RecuperarLibro
+	// Parametros : int
+	// Devuelve un objeto libro de la lista de libros del fichero XML que coincida con el identificador que le pasamos por parametro
 	public Libro RecuperarLibro( int identificador ) 
 	{		
 		boolean libroExiste = ComprobarLibroExiste( identificador );
 		
 		if( libroExiste ) 
 		{
-			return bibliotecaLibros.get( IndiceDelLibroEnLista( identificador ) ); // Posicion real en el arryalist bibilioteca
+			return bibliotecaLibros.get( IndiceDelLibroEnLista( identificador ) ); 
 		}
 		else
 		{
@@ -122,6 +132,9 @@ public class Biblioteca
 	
 	
 	
+	// Metodo : AnyadirLibro
+	// Parametros : Libro
+	// Anyade el objeto libro que le pasamos por parametro al fichero XML y devuelve la lista de libros actualizada
 	public ArrayList<Libro> AnyadirLibro( Libro libroCreado )
 	{
 		try
@@ -150,6 +163,9 @@ public class Biblioteca
 	
 	
 	
+	// Metodo : CrearLibro
+	// Parametros : Scanner
+	// Devuelve un Libro creado
 	public Libro CrearLibro( Scanner sc )
 	{
 		System.out.print( "\nIntroduce el id del libro a crear : ");
@@ -173,6 +189,9 @@ public class Biblioteca
 	
 	
 	
+	// Metodo : IndiceDelLibroEnLista
+	// Parametros : int
+	// Devuelve la posicion en la lista de libros del libro con el identificador que le pasamos por parametro
 	private int IndiceDelLibroEnLista( int identificador )
 	{
 		int indiceDelLibroEnLista = 0;
@@ -190,6 +209,9 @@ public class Biblioteca
 	
 	
 	
+	// Metodo : ActualizarLibro
+	// Parametros : Scanner, int
+	// Actualiza un libro en la lista de libros y guarda el resultado en el fichero XML seleccionado
 	public void ActualizarLibro( Scanner sc, int identificador )
 	{
 		boolean libroExiste = ComprobarLibroExiste( identificador );
@@ -224,7 +246,9 @@ public class Biblioteca
 	}
 	
 	
-	
+	// Metodo : BorrarLibro
+	// Parametros : Scanner, int
+	// Borra un libro en la lista de libros y guarda el resultado en el fichero XML seleccionado
 	public void BorrarLibro( int identificador )
 	{
 		boolean libroExiste = ComprobarLibroExiste( identificador );
@@ -261,6 +285,10 @@ public class Biblioteca
 	}
 	
 	
+	
+	// Metodo : GuardarInformacionXML
+	// Parametros : 
+	// Guarda la informacion del DOM en memoria de ejecuccion a un fichero XML seleccionado
 	private boolean GuardarInformacionXML() 
 	{
 		try 
@@ -285,24 +313,24 @@ public class Biblioteca
 					libro.appendChild( titulo ); // Elemento hijo del nodo libro (titulo)
 					
 					Element author = doc.createElement( "author" );
-					author.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getAuthor() ) ) ); // Se le da el valor al nodo titulo
+					author.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getAuthor() ) ) ); 
 					libro.appendChild( author );
 					
 					Element yearPublication = doc.createElement( "yearPublication" );
-					yearPublication.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getYearPublication() ) ) ); // Se le da el valor al nodo titulo
+					yearPublication.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getYearPublication() ) ) ); 
 					libro.appendChild( yearPublication );
 					
 					Element editorial = doc.createElement( "editorial" );
-					editorial.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getEditorial() ) ) ); // Se le da el valor al nodo titulo
+					editorial.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getEditorial() ) ) ); 
 					libro.appendChild( editorial );
 					
 					Element numPages = doc.createElement( "numPages" );
-					numPages.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getNumPages() ) ) ); // Se le da el valor al nodo titulo
+					numPages.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getNumPages() ) ) ); 
 					libro.appendChild( numPages );
 			}
 
 			// GUARDAR EL DOM DE LA MEMORIA DE EJECUCCION A DISCO
-			TransformerFactory tranFactory = TransformerFactory.newInstance(); //las dependencias puede que no sean correctas
+			TransformerFactory tranFactory = TransformerFactory.newInstance(); 
 			Transformer aTransformer = tranFactory.newTransformer();
 			
 			// DAR FORMATO AL FICHERO XML QUE ESTAMOS CREANDO
@@ -310,7 +338,7 @@ public class Biblioteca
 			aTransformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" ); // Indentado (sangria) 4 espacios
 			aTransformer.setOutputProperty( OutputKeys.INDENT,  "yes" ); // Activar el indentado
 			
-			
+			// GUARDAR EL DOM DE MEMORIA DE EJECUCCION A FICHERO XML
 			DOMSource source = new DOMSource( doc );
 			
 			try
@@ -344,6 +372,9 @@ public class Biblioteca
 	
 	
 	
+	// Metodo : DatosLibro
+	// Parametros : Scanner, int
+	// Devuelve un libro con la informacion sobre este registrada
 	private Libro DatosLibro( Scanner sc, int identificador )
 	{
 		String titulo, autor, anyoPublicacion, editorial, numPaginas;

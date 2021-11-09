@@ -13,7 +13,7 @@ public class App {
 		
 		while( !input.equals( "6" ) )
 		{
-			System.out.println( "\n\n### PANEL DE OPCIONES ###\n" );
+			System.out.println( "\n### PANEL DE OPCIONES ###\n" );
 			System.out.println( "1. Mostrar todos los titulos de la biblioteca." );
 			System.out.println( "2. Mostrar informacion detallada de un libro." );
 			System.out.println( "3. Crear nuevo libro." );
@@ -39,17 +39,15 @@ public class App {
 				
 					
 				case "2" :		
-					//do{
 						System.out.print( "\nIntroduce el *ID* del libro que quieres mostrar : ");
 						id = sc.nextInt();
-					//}while( id <= 0 || id > biblioteca.RecuperarTodos().size() );
 					
-					biblioteca.MostrarLibro( biblioteca.RecuperarLibro( id ) ); // RecuperarLibro( id )
+					biblioteca.MostrarLibro( biblioteca.RecuperarLibro( id ) );
 					break;
 				
 					
 				case "3" :					
-					biblioteca.AnyadirLibro( biblioteca.CrearLibro( sc ) ); //CrearLibro()
+					biblioteca.AnyadirLibro( biblioteca.CrearLibro( sc ) );
 					break;
 					
 					
