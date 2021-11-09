@@ -74,12 +74,12 @@ public class Biblioteca
 	{
 		try
 		{
-			System.out.println( ">> ID : " + libro.getId() );
-			System.out.println( ">> Titulo : " + libro.getTitle() );
-			System.out.println( ">> Autor : " + libro.getAuthor() );
-			System.out.println( ">> Anyo Publicacion : " + libro.getYearPublication() );
-			System.out.println( ">> Editorial : " + libro.getEditorial() );
-			System.out.println( ">> Numero Paginas : " + libro.getNumPages() );
+			System.out.println( "ID : " + libro.getId() );
+			System.out.println( "Titulo : " + libro.getTitle() );
+			System.out.println( "Autor : " + libro.getAuthor() );
+			System.out.println( "Anyo Publicacion : " + libro.getYearPublication() );
+			System.out.println( "Editorial : " + libro.getEditorial() );
+			System.out.println( "Numero Paginas : " + libro.getNumPages() );
 		}
 		catch( Exception e )
 		{
@@ -217,7 +217,7 @@ public class Biblioteca
 		boolean libroExiste = ComprobarLibroExiste( identificador );
 		
 		if( libroExiste ) {
-			System.out.println( "Libro seleccionado : " );
+			System.out.println( "* Libro seleccionado : *" );
 			
 			MostrarLibro( RecuperarLibro( identificador ) );
 			System.out.println( "" );
@@ -308,9 +308,9 @@ public class Biblioteca
 				libro.setAttribute( "id", String.valueOf( libroAnyadir.getId() ) );
 				biblioteca.appendChild( libro );
 			
-					Element titulo = doc.createElement( "titulo" );
-					titulo.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getTitle() ) ) ); // Se le da el valor al nodo titulo
-					libro.appendChild( titulo ); // Elemento hijo del nodo libro (titulo)
+					Element title = doc.createElement( "title" );
+					title.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getTitle() ) ) ); // Se le da el valor al nodo titulo
+					libro.appendChild( title ); // Elemento hijo del nodo libro (titulo)
 					
 					Element author = doc.createElement( "author" );
 					author.appendChild( doc.createTextNode( String.valueOf( libroAnyadir.getAuthor() ) ) ); 
@@ -343,7 +343,7 @@ public class Biblioteca
 			
 			try
 			{
-				FileWriter fw = new FileWriter( "/home/jordi/proyectosJavaEclipse/jordi_estelles_navarro_AE3_ADD/info/biblioteca2.xml" );
+				FileWriter fw = new FileWriter( "/home/jordi/proyectosJavaEclipse/jordi_estelles_navarro_AE3_ADD/info/biblioteca.xml" );
 				StreamResult result = new StreamResult( fw );
 				aTransformer.transform( source, result );
 				

@@ -48,29 +48,4 @@ public class Libro
 	{
 		return _numPages;
 	}
-	
-	public void setTitle( String title )
-	{
-		_title = title;
-	}
-	
-	public void setAuthor( String author ) 
-	{
-		_author = author;
-	}
-	
-	public void setYearPublication( int yearPublication ) 
-	{
-		_yearPublication = yearPublication;
-	}
-	
-	public void setEditorial( String editorial ) 
-	{
-		_editorial = editorial;
-	}
-	
-	public void setAuthor( int numPages ) 
-	{
-		_numPages = numPages;
-	}
 }

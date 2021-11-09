@@ -39,7 +39,7 @@ public class App {
 				
 					
 				case "2" :		
-						System.out.print( "\nIntroduce el *ID* del libro que quieres mostrar : ");
+						System.out.print( "\n> Introduce el *ID* del libro que quieres mostrar : ");
 						id = sc.nextInt();
 					
 					biblioteca.MostrarLibro( biblioteca.RecuperarLibro( id ) );
@@ -52,7 +52,7 @@ public class App {
 					
 					
 				case "4" :
-					System.out.print( "\nIntroduce el id del libro a actualizar : ");
+					System.out.print( "\n> Introduce el id del libro a actualizar : ");
 					id = sc.nextInt();
 					
 					biblioteca.ActualizarLibro( sc, id );
@@ -60,7 +60,7 @@ public class App {
 				
 					
 				case "5" :
-					System.out.print( "\nIntroduce el id del libro a borrar : ");
+					System.out.print( "\n> Introduce el id del libro a borrar : ");
 					id = sc.nextInt();
 					
 					biblioteca.BorrarLibro( id );
