@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <biblioteca>
+    <libro id="1">
+        <titulo>asd</titulo>
+        <author>asdf</author>
+        <yearPublication>1234</yearPublication>
+        <editorial>asdf</editorial>
+        <numPages>1234</numPages>
+    </libro>
     <libro id="2">
         <titulo>El Nombre del viento</titulo>
         <author>Rothfuss</author>
         <yearPublication>2000</yearPublication>
         <editorial>Santillana</editorial>
         <numPages>1000</numPages>
-    </libro>
-    <libro id="6">
-        <titulo>asdf</titulo>
-        <author>asdf</author>
-        <yearPublication>122</yearPublication>
-        <editorial>ads</editorial>
-        <numPages>12222</numPages>
     </libro>
 </biblioteca>
